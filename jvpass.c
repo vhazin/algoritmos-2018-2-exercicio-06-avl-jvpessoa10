@@ -9,22 +9,23 @@ typedef struct node {
     int value;
 }Node;
 
-int maxDepth(Node* node)  
+int depth(Node* node)  
 { 
    if (node==NULL)  
        return 0; 
    else 
    { 
-       /* compute the depth of each subtree */
-       int lDepth = maxDepth(node->left); 
-       int rDepth = maxDepth(node->right); 
-  
-       /* use the larger one */
+       int lDepth = depth(node->left); 
+       int rDepth = depth(node->right); 
+
        if (lDepth > rDepth)  
            return(lDepth+1); 
        else return(rDepth+1); 
    } 
 }  
+
+
+
 Node * insereEmArvore(Node * arvore, int info){  
     if(arvore == NULL){
         Node * new = malloc(sizeof(Node));
@@ -40,7 +41,15 @@ Node * insereEmArvore(Node * arvore, int info){
     }   
     return arvore;
 }
- 
+int isAVL(Node * node){
+    if(node == NULL)return 0;
+    int nivelDeBalanceamento = (depth(node->left))-(depth(node->right));
+    if(-1>nivelDeBalanceamento || 1<nivelDeBalanceamento) return 0;
+    isAVL(node->left);
+    isAVL(node->right);
+    return 1;
+}
+
 int main(void){
     int testCaseNumber,valuesNumber;
     scanf("%i",&testCaseNumber);    
@@ -56,7 +65,9 @@ int main(void){
             mainRoot = insereEmArvore(mainRoot,nodeValue);
             
         }
-        printf("%d",maxDepth(mainRoot));
+        printf("l: %d",depth(mainRoot->left));
+        printf("r: %d",depth(mainRoot->right));
+        isAVL(mainRoot)?printf("T\n"):printf("F\n");
         
         
     }
